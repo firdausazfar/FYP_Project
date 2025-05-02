@@ -1,19 +1,12 @@
 from sklearn.preprocessing import StandardScaler
+import joblib  
 import pandas as pd
 
 def load_spotify(csv_path):
     df = pd.read_csv(csv_path)
-    print("\n🎵 All columns in Spotify dataset:")
+    print("\nAll columns in Spotify dataset:")
     print(df.columns.tolist())
-    feature_columns = [
-    'BPM',
-    'Frequency [Classical]', 'Frequency [Country]', 'Frequency [EDM]',
-    'Frequency [Folk]', 'Frequency [Gospel]', 'Frequency [Hip hop]',
-    'Frequency [Jazz]', 'Frequency [K pop]', 'Frequency [Latin]',
-    'Frequency [Lofi]', 'Frequency [Metal]', 'Frequency [Pop]',
-    'Frequency [R&B]', 'Frequency [Rap]', 'Frequency [Rock]',
-    'Frequency [Video game music]'
-    ]
+    genre_columns = [col for col in df.columns if col.startswith("Frequency [")]
     freq_map = {
     "Never": 0,
     "Rarely": 1,
@@ -21,7 +14,7 @@ def load_spotify(csv_path):
     "Usually": 3,
     "Always": 4
 }
-    available_columns = [col for col in feature_columns if col in df.columns]
+    available_columns = [col for col in genre_columns if col in df.columns]
     for col in available_columns:
         if df[col].dtype == object:
             df[col] = df[col].map(freq_map)
@@ -29,7 +22,10 @@ def load_spotify(csv_path):
     df = df.dropna(subset = available_columns + ['Depression'])
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(df[available_columns])
+    joblib.dump(scaler, "models/spotify_scaler.pkl")
+    print("Scaler saved to models/spotify_scaler.pkl")
     labels = df['Depression'].values
+    print(f"Processed {scaled_features.shape[0]} samples with {scaled_features.shape[1]} genre features.")
     return scaled_features, labels
 
 if __name__ == "__main__":

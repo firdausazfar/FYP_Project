@@ -19,7 +19,7 @@ def get_artist_genre_from_spotify(artist_id):
         artist = sp.artist(artist_id)
         genres = artist['genres']
         if genres:
-            return genres[0]  # Get the first genre from the list
+            return genres[0]  
         else:
             return "No genre found"
     except spotipy.exceptions.SpotifyException as e:
@@ -44,7 +44,6 @@ def get_recent_tracks(limit=10):
 
 # Main execution
 if __name__ == "__main__":
-    # Fetch recent tracks from Spotify
     recent_tracks = get_recent_tracks()
     print(f"Retrieved {len(recent_tracks)} tracks:")
 

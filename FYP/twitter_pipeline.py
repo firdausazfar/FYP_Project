@@ -7,7 +7,8 @@ def load_tweets(csv_path):
 
 def analyse_sentiment(tweets):
     classifier = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
-    results = classifier(tweets)
+    tweets = [t[:512] for t in tweets]
+    results = classifier(tweets, truncation=True)
     sentiments = [r['label'] for r in results]
     return sentiments
 
@@ -16,4 +17,3 @@ if __name__ == "__main__" :
     sentiments = analyse_sentiment(tweets)
     for tweet, sent in zip(tweets, sentiments):
         print(f"{tweet[:50]}... => {sent}")
-

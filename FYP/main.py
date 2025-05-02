@@ -26,19 +26,44 @@ def simplify_labels(y):
 if __name__ == "__main__":
     tweet_df = pd.read_csv("datasets/Combined_Data.csv")  
     print("Available columns in Combined_Data.csv:", tweet_df.columns.tolist())
-    tweets = tweet_df[tweet_df.columns[2]].dropna().tolist()
-    sentiments = analyse_sentiment(tweets)
-    twitter_features = encode_sentiments_to_numeric(sentiments)
 
+    tweet_df = tweet_df.dropna(subset=["statement"]) 
+    print(f"Loaded tweet_df shape: {tweet_df.shape}")
+    tweets = tweet_df["statement"].dropna().tolist()
+    print(f"Loaded {len(tweets)} tweets")
+
+    import time
+    print("Starting sentiment analysis...")
+    sentiments = []
+    batch_size = 1000
+    total_batches = (len(tweets) + batch_size - 1) // batch_size
+    for i in range(total_batches):
+        batch = tweets[i * batch_size:(i + 1) * batch_size]
+        print(f"Processing batch {i + 1}/{total_batches}...")
+        start_time = time.time()
+        batch_sentiments = analyse_sentiment(batch)
+        elapsed = time.time() - start_time
+        print(f"Batch {i + 1} done in {elapsed:.2f} seconds")
+        sentiments.extend(batch_sentiments)
+    print(f"Sentiments length: {len(sentiments)}")
+    twitter_features = encode_sentiments_to_numeric(sentiments)
+    print(f"Encoded Twitter features shape: {twitter_features.shape}")
+
+    print("Loading Spotify genre data...")
     spotify_features, labels = load_spotify("datasets/mxmh_survey_results.csv")
+    print(f"Spotify features shape: {spotify_features.shape}, Labels shape: {labels.shape}")
 
     min_length = min(len(twitter_features), len(spotify_features), len(labels))
+    print(f"Truncating all features and labels to min_length: {min_length}")
     twitter_features = twitter_features[:min_length]
     spotify_features = spotify_features[:min_length]
     labels = labels[:min_length]
 
     labels = simplify_labels(labels)
-    X = combine_features(twitter_features, spotify_features)
-    clf, acc = train_model(X, labels)
+    print(f"Simplified labels shape: {labels.shape}")
 
-    print(f"✅ Model trained with {min_length} samples — Accuracy: {acc:.2f}")
+    X = combine_features(twitter_features, spotify_features)
+    print(f"Combined feature matrix shape: {X.shape}")
+    
+    clf, acc = train_model(X, labels)
+    print(f"Model trained with {min_length} samples — Accuracy: {acc:.2f}")

@@ -3,8 +3,12 @@ from dotenv import load_dotenv
 import os
 import time
 
+load_dotenv()
 
-def get_recent_tweets(username, bearer_token, max_results=10):
+
+def get_recent_tweets(username, bearer_token=None, max_results=10):
+    if bearer_token is None:
+        bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
     client = tweepy.Client(bearer_token=bearer_token)
 
     try:
@@ -25,7 +29,6 @@ def get_recent_tweets(username, bearer_token, max_results=10):
 
     
 if __name__ == "__main__":
-    load_dotenv()
     BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN")
     tweets = get_recent_tweets("FYPOus", BEARER_TOKEN)
     print(f"Retreived {len(tweets)} tweets.")
