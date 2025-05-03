@@ -34,13 +34,3 @@ def train_model(X, y, clf=None):
     print("Final model trained on full data and saved to models/depression_model.pkl")
 
     return clf, scores.mean()
-
-def simulate_fused_training(twitter_data, twitter_labels, spotify_data, spotify_labels):
-    min_len = min(len(twitter_data), len(spotify_data))
-    twitter_sample = twitter_data[:min_len]
-    spotify_sample = spotify_data[:min_len]
-    labels = spotify_labels[:min_len]  
-
-    fused_features = combine_features(twitter_sample, spotify_sample)
-    print("Simulating fusion model training with independent datasets.")
-    return train_model(fused_features, labels)

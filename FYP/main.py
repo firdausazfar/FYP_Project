@@ -65,6 +65,5 @@ if __name__ == "__main__":
     X = combine_features(twitter_features, spotify_features)
     print(f"Combined feature matrix shape: {X.shape}")
     
-    from model_fusion import simulate_fused_training
-    clf, acc = simulate_fused_training(twitter_features, labels, spotify_features, labels)
+    clf, acc = train_model(X, labels)
     print(f"Model trained with {min_length} samples — Accuracy: {acc:.2f}")
