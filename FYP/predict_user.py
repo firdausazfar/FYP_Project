@@ -54,7 +54,7 @@ else:
         print(f"{track['name']} by {track['artist']} (Artist ID: {track['artist_id']}) → Genre: {genre}")
 
 # Build genre frequency vector with partial string matching (case-insensitive)
-all_genres = ["Classical", "Country", "EDM", "Folk", "Gospel", "Hip hop", "Jazz", "K pop", "Latin", "Lofi", "Metal", "Pop", "R&B", "Rap", "Rock", "Video game music"]
+all_genres = ["Classical", "Country", "EDM", "Folk", "Gospel", "Hip hop", "Jazz", "Latin", "Lofi", "K-pop", "Metal", "Pop", "R&B", "Rap", "Rock", "Video game music"]
 genre_vector = []
 for genre in all_genres:
     count = sum(1 for g in genre_list if genre.lower() in g.lower())
