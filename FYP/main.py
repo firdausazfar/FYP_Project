@@ -3,6 +3,7 @@ from spotify_pipeline import load_spotify
 from model_fusion import combine_features, train_model
 import numpy as np
 import pandas as pd
+import time
 
 def encode_sentiments_to_numeric(sentiments):
     label_map = {
@@ -32,7 +33,6 @@ if __name__ == "__main__":
     tweets = tweet_df["statement"].dropna().tolist()
     print(f"Loaded {len(tweets)} tweets")
 
-    import time
     print("Starting sentiment analysis...")
     sentiments = []
     batch_size = 1000

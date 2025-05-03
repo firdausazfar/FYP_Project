@@ -2,8 +2,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.model_selection import cross_val_score, StratifiedKFold, GridSearchCV
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import joblib
 
 def combine_features(twitter_data, spotify_data):

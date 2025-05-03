@@ -5,7 +5,6 @@ import time
 
 load_dotenv()
 
-
 def get_recent_tweets(username, bearer_token=None, max_results=10):
     if bearer_token is None:
         bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
