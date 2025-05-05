@@ -72,10 +72,8 @@ spotify_df = pd.DataFrame(spotify_genres, columns=genre_columns)
 
 # === Normalize Spotify genre features using the trained scaler ===
 scaler = joblib.load("models/spotify_scaler.pkl")
-scaled_spotify = scaler.transform(spotify_df)
 
-print("\n=== Scaled Spotify Features ===")
-print(scaled_spotify)
+scaled_spotify = scaler.transform(spotify_df)
 
 # === Combine sentiment with normalized genre features and predict ===
 sentiment_numeric = sentiment_avg

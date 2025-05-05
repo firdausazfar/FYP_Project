@@ -33,4 +33,9 @@ def train_model(X, y, clf=None):
     joblib.dump(clf, "models/depression_model.pkl")
     print("Final model trained on full data and saved to models/depression_model.pkl")
 
+    print("\n=== Feature Importances ===")
+    feature_names = ["Sentiment"] + [f"Genre_{i}" for i in range(X.shape[1] - 1)]
+    for name, importance in zip(feature_names, clf.feature_importances_):
+        print(f"{name}: {importance:.3f}")
+
     return clf, scores.mean()
